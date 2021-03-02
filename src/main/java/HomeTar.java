@@ -51,14 +51,14 @@ public class HomeTar {
 
         for (String s : inputName) {
             FileReader reader = new FileReader(s);
-            writer.append(s).append(" {\n");
+            writer.append("File ").append(inputName.indexOf(s)).append(" ").append(s).append(" {\n");
 
             int character;
             while ((character = reader.read()) != -1) {
                 writer.append((char) character);
             }
 
-            writer.append("\n}\n");
+            writer.append("\n}").append(" File ").append(inputName.indexOf(s)).append(" end\n");
         }
         writer.deleteCharAt(writer.length() - 1);
 
