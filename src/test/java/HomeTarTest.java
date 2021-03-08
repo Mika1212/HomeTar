@@ -1,27 +1,31 @@
-
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HomeTarTest {
 
     @Test
-    void uKey() throws IOException {
-        String a = "outputForUkey.txt";
-        String forTest1 = "testForUkey1.txt";
-        String forTest2 = "testForUkey2.txt";
-        String test1 = "test1";
-        String test2 = "test2";
-        HomeTar.uKey(a);
-
-        assertEquals(new File(forTest1), new File(test1));
-        assertEquals(new File(forTest2), new File(test2));
+    void isEqual() throws IOException {
+        assertTrue(HomeTar.isEqual(new File("outKeyInput1.txt"), new File("outKeyInput1.txt")));
+        assertTrue(HomeTar.isEqual(new File("outKeyInput2.txt"), new File("outKeyInput2.txt")));
+        assertFalse(HomeTar.isEqual(new File("uKeyInput.txt"), new File("outKeyInput1.txt")));
     }
 
     @Test
-    void outKey() {
+    void outKey() throws IOException {
+        assertTrue(HomeTar.isEqual(new File("outKeyExpected.txt"), new File("outKeyOutput.txt")));
+        assertFalse(HomeTar.isEqual(new File("uKeyInput.txt"), new File("outKeyOutput.txt")));
+    }
+
+    @Test
+    void uKey() throws IOException {
+        assertTrue(HomeTar.isEqual(new File("uKeyExpected1.txt"), new File("uKeyOutput1.txt")));
+        assertTrue(HomeTar.isEqual(new File("uKeyExpected2.txt"), new File("uKeyOutput2.txt")));
+        assertTrue(HomeTar.isEqual(new File("outKeyInput1.txt"), new File("uKeyOutput1.txt")));
+        assertTrue(HomeTar.isEqual(new File("outKeyInput2.txt"), new File("uKeyOutput2.txt")));
     }
 }

@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class HomeTar {
+public class HomeTar{
 
     public static void uKey(String inputName) throws IOException {
         FileReader reader = new FileReader(inputName);
@@ -22,6 +22,7 @@ public class HomeTar {
                 numberOfLines++;
                 int end = nameToOutput.indexOf(" ");
                 String name = nameToOutput.substring(0, end);
+                System.out.println(name);
                 int number = Integer.parseInt(nameToOutput.substring(end + 1));
 
                 outputFileName.add(name);
@@ -127,8 +128,24 @@ public class HomeTar {
 
         if (args[1].toLowerCase().equals("-u")) {
             uKey(args[2]);
-        } else if (args[1].toLowerCase().equals("-out")){
+        } else
            outKey(args);
-        } else System.out.println("Specify your command line");
+    }
+
+    public static boolean isEqual(File it, File other) throws IOException {
+        FileReader itReader = new FileReader(it);
+        FileReader otherReader = new FileReader(other);
+        int itCharacter;
+        int otherCharacter;
+
+        while ((itCharacter = itReader.read()) != -1) {
+            otherCharacter = otherReader.read();
+            while (otherCharacter == 13) otherCharacter = otherReader.read();
+            while (itCharacter == 13) itCharacter = itReader.read();
+            if (itCharacter != otherCharacter) {
+                return false;
+            }
+        }
+        return true;
     }
 }

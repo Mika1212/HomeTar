@@ -1,5 +1,5 @@
-testForUkey1.txt 36
-testForUkey2.txt 20
+outKeyInput1.txt 36
+outKeyInput2.txt 20
 
 
 sample 1 sfaaa

@@ -1,0 +1,11 @@
+outKeyInput1.txt 36
+outKeyInput2.txt 20
+
+
+sample 1 sfaaa
+zlkfhjlka
+dfk;df
+|
+sample 2 sgf
+dcg
+|
