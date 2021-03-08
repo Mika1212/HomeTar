@@ -1,7 +1,20 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class HomeTar{
+class HomeTar{
+
+    public static void main(String[] args) throws IOException {
+
+        if (!args[0].toLowerCase().equals("hometar")) {
+            System.out.println("Specify your command line");
+            return;
+        }
+
+        if (args[1].toLowerCase().equals("-u")) {
+            uKey(args[2]);
+        } else
+            outKey(args);
+    }
 
     public static void uKey(String inputName) throws IOException {
         FileReader reader = new FileReader(inputName);
@@ -22,7 +35,6 @@ public class HomeTar{
                 numberOfLines++;
                 int end = nameToOutput.indexOf(" ");
                 String name = nameToOutput.substring(0, end);
-                System.out.println(name);
                 int number = Integer.parseInt(nameToOutput.substring(end + 1));
 
                 outputFileName.add(name);
@@ -65,10 +77,6 @@ public class HomeTar{
 
             if (args[i].toLowerCase().equals("-out")) {
                 outputName = args[i + 1];
-                File newFile = new File(outputName);
-                boolean created = newFile.createNewFile();
-                if (created) System.out.println("Output created");
-                else System.out.println("Output doesn't created");
                 break;
             }
 
@@ -80,12 +88,10 @@ public class HomeTar{
             inputName.add(args[i]);
         }
 
-
         if (outputName == null) {
             System.out.println("Output file wasn't specified");
             return;
         }
-        System.out.println("----------------------\n");
 
         FileWriter result = new FileWriter(outputName, false);
         StringBuilder writer = new StringBuilder();
@@ -115,21 +121,6 @@ public class HomeTar{
         while ((character = resultReader.read()) != -1) {
             System.out.print((char) character);
         }
-    }
-
-
-
-    public static void main(String[] args) throws IOException {
-
-        if (!args[0].toLowerCase().equals("hometar")) {
-            System.out.println("Specify your command line");
-            return;
-        }
-
-        if (args[1].toLowerCase().equals("-u")) {
-            uKey(args[2]);
-        } else
-           outKey(args);
     }
 
     public static boolean isEqual(File it, File other) throws IOException {
