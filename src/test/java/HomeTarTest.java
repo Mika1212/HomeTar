@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,24 +9,35 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HomeTarTest {
 
+    public static boolean isEqual(File it, File other) throws IOException {
+        FileReader itReader = new FileReader(it);
+        FileReader otherReader = new FileReader(other);
+        int itCharacter;
+        int otherCharacter;
+
+        while ((itCharacter = itReader.read()) != -1) {
+            otherCharacter = otherReader.read();
+            if (itCharacter != otherCharacter) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Test
     void isEqual() throws IOException {
-        assertTrue(HomeTar.isEqual(new File("outKeyInput1.txt"), new File("outKeyInput1.txt")));
-        assertTrue(HomeTar.isEqual(new File("outKeyInput2.txt"), new File("outKeyInput2.txt")));
-        assertFalse(HomeTar.isEqual(new File("uKeyInput.txt"), new File("outKeyInput1.txt")));
+        assertTrue(isEqual(new File("testData//in1.txt"), new File("testData//inCopy1.txt")));
+        assertTrue(isEqual(new File("testData//in2.txt"), new File("testData//inCopy2.txt")));
+        assertFalse(isEqual(new File("testData//inCopy1.txt"), new File("testData//inCopy2.txt")));
     }
 
     @Test
-    void outKey() throws IOException {
-        assertTrue(HomeTar.isEqual(new File("outKeyExpected.txt"), new File("outKeyOutput.txt")));
-        assertFalse(HomeTar.isEqual(new File("uKeyInput.txt"), new File("outKeyOutput.txt")));
+    void main() throws IOException {
+        HomeTar.main(new String[]{"hometar", "testData//in1.txt", "testData//in2.txt", "-out", "testData//output.txt"});
+        HomeTar.main(new String[]{"hometar", "-u", "testData//output.txt"});
+        assertTrue(isEqual(new File("testData//in1.txt"), new File("testData//inCopy1.txt")));
+        assertTrue(isEqual(new File("testData//in2.txt"), new File("testData//inCopy2.txt")));
     }
 
-    @Test
-    void uKey() throws IOException {
-        assertTrue(HomeTar.isEqual(new File("uKeyExpected1.txt"), new File("uKeyOutput1.txt")));
-        assertTrue(HomeTar.isEqual(new File("uKeyExpected2.txt"), new File("uKeyOutput2.txt")));
-        assertTrue(HomeTar.isEqual(new File("outKeyInput1.txt"), new File("uKeyOutput1.txt")));
-        assertTrue(HomeTar.isEqual(new File("outKeyInput2.txt"), new File("uKeyOutput2.txt")));
-    }
+
 }
