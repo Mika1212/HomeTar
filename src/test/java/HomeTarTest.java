@@ -3,15 +3,13 @@ import org.opentest4j.AssertionFailedError;
 
 import java.io.File;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import static java.nio.file.Files.delete;
-import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Files.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HomeTarTest {
@@ -29,9 +27,9 @@ class HomeTarTest {
         Path copy1 = Paths.get("testData//inCopy1.txt");
         Path copy2 = Paths.get("testData//inCopy2.txt");
         Path output = Paths.get("testData//output.txt");
-        delete(copy1);
-        delete(copy2);
-        delete(output);
+        deleteIfExists(copy1);
+        deleteIfExists(copy2);
+        deleteIfExists(output);
     }
 
     public static boolean isEqual(File it, File other) throws IOException {
@@ -58,10 +56,16 @@ class HomeTarTest {
     @Test
     void main() throws IOException {
         somePreparations();
+        Path in1 = Paths.get("testData//in1.txt");
+        Path in2 = Paths.get("testData//in2.txt");
+        Path inCopy1 = Paths.get("testData//inCopy1.txt");
+        Path inCopy2 = Paths.get("testData//inCopy1.txt");
+        Path output = Paths.get("testData//output.txt");
+
         HomeTar.main(new String[]{"hometar", "testData//in1.txt", "testData//in2.txt", "-out", "testData//output.txt"});
         HomeTar.main(new String[]{"hometar", "-u", "testData//output.txt"});
-        assertTrue(isEqual(new File("testData//in1.txt"), new File("testData//inCopy1.txt")));
-        assertTrue(isEqual(new File("testData//in2.txt"), new File("testData//inCopy2.txt")));
+        assertTrue(isEqual(new File(String.valueOf(in1)), new File(String.valueOf(inCopy1))));
+
         ending();
     }
 

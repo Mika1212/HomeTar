@@ -34,7 +34,7 @@ class HomeTar{
             inputName.add(args[2]);
             uKey(inputName.get(0));
         } else {
-            for (int i = 2; i < args.length; i++) {
+            for (int i = 1; i < args.length; i++) {
                if (args[i].equals("-out")) {
                    outputName = args[i+1];
                    break;
@@ -91,12 +91,12 @@ class HomeTar{
                 newFileWriter.write(character);
                 k++;
             } else {
-                newFileWriter.flush();
+                newFileWriter.close();
                 k = 0;
             }
         }
-
-        newFileWriter.flush();
+        reader.close();
+        newFileWriter.close();
     }
 
     public static void outKey(List<String> listOfInput, String outputName) throws IOException {
@@ -122,13 +122,15 @@ class HomeTar{
                 writer.append((char) character);
             }
 
+            reader.close();
             writer.append("\n");
             info.append(s).append(" ").append(lengthOfText).append("\n");
         }
 
+
         writer.deleteCharAt(writer.length() - 1);
         result.write(info + "\n\n");
         result.write(String.valueOf(writer));
-        result.flush();
+        result.close();
     }
 }
