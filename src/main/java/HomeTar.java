@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeTar {
+class HomeTar{
 
     public static void main(String[] args) throws IOException {
 
@@ -26,116 +26,109 @@ public class HomeTar {
             return;
         }
 
+
         List<String> inputName = new ArrayList<>();
         String outputName = null;
 
         if (args[1].toLowerCase().equals("-u")) {
-
-            if (args.length < 3) {
-                System.out.println("Specify your command line");
-                return;
-            }
-
-            FileReader reader = new FileReader(args[2]);
-            char character;
-            StringBuilder nameToOutput = new StringBuilder();
-            List<String> outputFileName = new ArrayList<>();
-            List<Integer> outputFileNumber = new ArrayList<>();
-            int numberOfLines = 0;
-
-            while ((character = (char) reader.read()) != (char) -1) {
-                if (character == '\n') {
-                    if (numberOfLines == 1) break;
-                }
-                if (character != '\n') {
-                    nameToOutput.append(character);
-                    numberOfLines = 0;
-                } else {
-                    numberOfLines++;
-                    int end = nameToOutput.indexOf(" ");
-                    String name = nameToOutput.substring(0, end);
-                    int number = Integer.parseInt(nameToOutput.substring(end + 1));
-
-                    outputFileName.add(name);
-                    outputFileNumber.add(number);
-                    nameToOutput = new StringBuilder();
-                }
-
-            }
-
-            reader.read();
-            int i = 0;
-            int k = 0;
-            File newFile = new File(outputFileName.get(i));
-            FileWriter newFileWriter = new FileWriter(newFile);
-
-            while ((character = (char) reader.read()) != (char) -1) {
-                if (k == 0) {
-                    newFile = new File(outputFileName.get(i));
-                    newFileWriter = new FileWriter(newFile);
-                    i++;
-                }
-                if (k < outputFileNumber.get(i - 1)) {
-                    newFileWriter.write(character);
-                    k++;
-                } else {
-                    newFileWriter.flush();
-                    k = 0;
-                }
-            }
-
-            newFileWriter.flush();
-
+            inputName.add(args[2]);
+            uKey(inputName.get(0));
         } else {
-
-            if (args.length < 4) {
+            for (int i = 2; i < args.length; i++) {
+               if (args[i].equals("-out")) {
+                   outputName = args[i+1];
+                   break;
+               }
+               inputName.add(args[i]);
+            }
+            if (outputName == null) {
                 System.out.println("Specify your command line");
                 return;
             }
-
-            for (int i = 1; i < args.length - 1; i++) {
-
-                if (args[i].toLowerCase().equals("-out")) {
-                    outputName = args[i + 1];
-                    break;
-                }
-
-                if (!new File(args[i]).exists()) {
-                    System.out.println("\"" + args[i] + "\"" + " file doesn't exist");
-                    return;
-                }
-
-                inputName.add(args[i]);
-            }
-
-
-            if (outputName == null) {
-                System.out.println("Output file wasn't specified");
-                return;
-            }
-
-            FileWriter result = new FileWriter(outputName, false);
-            StringBuilder writer = new StringBuilder();
-            StringBuilder info = new StringBuilder();
-
-            for (String s : inputName) {
-                FileReader reader = new FileReader(s);
-                int lengthOfText = 0;
-
-                int character;
-                while ((character = reader.read()) != -1) {
-                    lengthOfText++;
-                    writer.append((char) character);
-                }
-
-                writer.append("\n");
-                info.append(s).append(" ").append(lengthOfText).append("\n");
-            }
-            writer.deleteCharAt(writer.length() - 1);
-            result.write(info + "\n\n");
-            result.write(String.valueOf(writer));
-            result.flush();
+            outKey(inputName, outputName);
         }
     }
-}
 
+    public static void uKey(String inputName) throws IOException {
+        FileReader reader = new FileReader(inputName);
+        int character;
+        StringBuilder nameToOutput = new StringBuilder();
+        List<String> outputFileName = new ArrayList<>();
+        List<Integer> outputFileNumber = new ArrayList<>();
+        int numberOfLines = 0;
+
+        while ((character = reader.read()) != -1) {
+            if ((char) character == '\n') {
+                if (numberOfLines == 1) break;
+            }
+            if ((char) character != '\n') {
+                nameToOutput.append((char) character);
+                numberOfLines = 0;
+            } else {
+                numberOfLines++;
+                int end = nameToOutput.indexOf(" ");
+                String name = nameToOutput.substring(0, end);
+                int number = Integer.parseInt(nameToOutput.substring(end + 1));
+
+                outputFileName.add(name);
+                outputFileNumber.add(number);
+                nameToOutput = new StringBuilder();
+            }
+
+        }
+        reader.read();
+        int i = 0;
+        int k = 0;
+        File newFile = new File(outputFileName.get(i));
+        FileWriter newFileWriter = new FileWriter(newFile);
+        while ((character = reader.read()) != -1) {
+            if (k == 0) {
+                newFile = new File(outputFileName.get(i));
+                newFileWriter = new FileWriter(newFile);
+                i++;
+            }
+            if (k<outputFileNumber.get(i - 1)) {
+                newFileWriter.write(character);
+                k++;
+            } else {
+                newFileWriter.flush();
+                k = 0;
+            }
+        }
+
+        newFileWriter.flush();
+    }
+
+    public static void outKey(List<String> listOfInput, String outputName) throws IOException {
+
+        for (int i = 0; i < listOfInput.size() - 1; i++) {
+            if (!new File(listOfInput.get(i)).exists()) {
+                System.out.println("\"" + listOfInput.get(i) + "\"" + " file doesn't exist");
+                return;
+            }
+        }
+
+        FileWriter result = new FileWriter(outputName, false);
+        StringBuilder writer = new StringBuilder();
+        StringBuilder info = new StringBuilder();
+
+        for (String s : listOfInput) {
+            FileReader reader = new FileReader(s);
+            int lengthOfText = 0;
+
+            int character;
+            while ((character = reader.read()) != -1) {
+                lengthOfText++;
+                writer.append((char) character);
+            }
+
+            writer.append("\n");
+            info.append(s).append(" ").append(lengthOfText).append("\n");
+        }
+
+        writer.deleteCharAt(writer.length() - 1);
+        result.write(info + "\n\n");
+        result.write(String.valueOf(writer));
+        result.flush();
+    }
+}

@@ -15,8 +15,7 @@ class HomeTarTest {
         int itCharacter;
         int otherCharacter;
 
-        while ((itCharacter = itReader.read()) != -1) {
-            otherCharacter = otherReader.read();
+        while ((itCharacter = itReader.read()) != -1 | (otherCharacter = otherReader.read()) != -1) {
             if (itCharacter != otherCharacter) {
                 return false;
             }
