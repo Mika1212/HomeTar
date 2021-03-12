@@ -3,7 +3,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +86,7 @@ class HomeTar{
                 numberOfLines = 0;
             } else {
                 numberOfLines++;
-                int end = nameToOutput.indexOf(" ");
+                int end = nameToOutput.indexOf("|");
                 String name = nameToOutput.substring(0, end);
                 int number = Integer.parseInt(nameToOutput.substring(end + 1));
 
@@ -111,15 +110,15 @@ class HomeTar{
         FileWriter newFileWriter = new FileWriter(newFile);
         while ((character = (char) reader.read()) != (char)-1) {
             if (k == 0) {
+                newFileWriter.close();
                 newFile = new File(outputFileName.get(i));
                 newFileWriter = new FileWriter(newFile);
                 i++;
             }
-            if (k<outputFileNumber.get(i - 1)) {
+            if (k < outputFileNumber.get(i - 1)) {
                 newFileWriter.write(character);
                 k++;
             } else {
-                newFileWriter.close();
                 k = 0;
             }
         }
@@ -137,7 +136,6 @@ class HomeTar{
             }
         }
 
-        FileWriter result = new FileWriter(outputName, false);
         StringBuilder writer = new StringBuilder();
         StringBuilder info = new StringBuilder();
 
@@ -153,10 +151,10 @@ class HomeTar{
 
             reader.close();
             writer.append("\n");
-            info.append(s).append(" ").append(lengthOfText).append("\n");
+            info.append(s).append("|").append(lengthOfText).append("\n");
         }
 
-
+        FileWriter result = new FileWriter(outputName, false);
         writer.deleteCharAt(writer.length() - 1);
         result.write(info + "\n\n");
         result.write(writer.toString());

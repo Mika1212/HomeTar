@@ -2,8 +2,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -62,9 +60,9 @@ class HomeTarTest {
         Path inCopy2 = Paths.get("testData//inCopy2.txt");
         Path output = Paths.get("testData//output.txt");
 
-        HomeTar.main(new String[]{"hometar",  "-out", String.valueOf(output), String.valueOf(in1), String.valueOf(in2)});
-        deleteIfExists(in1);
-        deleteIfExists(in2);
+        HomeTar.main(new String[]{"hometar",  "-out", String.valueOf(output), String.valueOf(inCopy1), String.valueOf(inCopy2)});
+        deleteIfExists(inCopy1);
+        deleteIfExists(inCopy2);
         HomeTar.main(new String[]{"hometar", "-u", String.valueOf(output)});
         assertTrue(isEqual(in1, inCopy1));
         assertTrue(isEqual(in2, inCopy2));
