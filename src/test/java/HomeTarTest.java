@@ -1,5 +1,6 @@
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opentest4j.AssertionFailedError;
 
 import java.io.File;
 
@@ -14,15 +15,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HomeTarTest {
 
+    @BeforeEach
     void somePreparations() throws IOException {
-        Path it1 = Paths.get("testData//in1.txt");
+        Path in1 = Paths.get("testData//in1.txt");
         Path copy1 = Paths.get("testData//inCopy1.txt");
-        Files.copy(it1, copy1, StandardCopyOption.REPLACE_EXISTING);
-        Path it2 = Paths.get("testData//in2.txt");
+        Files.copy(in1, copy1, StandardCopyOption.REPLACE_EXISTING);
+        Path in2 = Paths.get("testData//in2.txt");
         Path copy2 = Paths.get("testData//inCopy2.txt");
-        Files.copy(it2, copy2, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(in2, copy2, StandardCopyOption.REPLACE_EXISTING);
     }
 
+    @AfterEach
     void ending() throws IOException {
         Path copy1 = Paths.get("testData//inCopy1.txt");
         Path copy2 = Paths.get("testData//inCopy2.txt");
@@ -36,37 +39,31 @@ class HomeTarTest {
 
         byte[] first = readAllBytes(Paths.get(it.getPath()));
         byte[] second = readAllBytes(Paths.get(other.getPath()));
-        try {
-            assertArrayEquals(first, second);
-        } catch (AssertionFailedError e) {
-            return false;
-        }
+
+        assertArrayEquals(first, second);
         return true;
     }
 
     @Test
     void isEqual() throws IOException {
-        somePreparations();
         assertTrue(isEqual(new File("testData//in1.txt"), new File("testData//inCopy1.txt")));
         assertTrue(isEqual(new File("testData//in2.txt"), new File("testData//inCopy2.txt")));
-        assertFalse(isEqual(new File("testData//inCopy1.txt"), new File("testData//inCopy2.txt")));
-        ending();
     }
 
     @Test
     void main() throws IOException {
-        somePreparations();
         Path in1 = Paths.get("testData//in1.txt");
         Path in2 = Paths.get("testData//in2.txt");
         Path inCopy1 = Paths.get("testData//inCopy1.txt");
-        Path inCopy2 = Paths.get("testData//inCopy1.txt");
+        Path inCopy2 = Paths.get("testData//inCopy2.txt");
         Path output = Paths.get("testData//output.txt");
 
-        HomeTar.main(new String[]{"hometar", "testData//in1.txt", "testData//in2.txt", "-out", "testData//output.txt"});
-        HomeTar.main(new String[]{"hometar", "-u", "testData//output.txt"});
+        HomeTar.main(new String[]{"hometar", String.valueOf(inCopy1), String.valueOf(inCopy2), "-out", String.valueOf(output)});
+        deleteIfExists(inCopy1);
+        deleteIfExists(inCopy2);
+        HomeTar.main(new String[]{"hometar", "-u", String.valueOf(output)});
         assertTrue(isEqual(new File(String.valueOf(in1)), new File(String.valueOf(inCopy1))));
-
-        ending();
+        assertTrue(isEqual(new File(String.valueOf(in2)), new File(String.valueOf(inCopy2))));
     }
 
 

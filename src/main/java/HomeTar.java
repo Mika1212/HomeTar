@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,14 +27,11 @@ class HomeTar{
             return;
         }
 
-
-        List<String> inputName = new ArrayList<>();
-        String outputName = null;
-
         if (args[1].toLowerCase().equals("-u")) {
-            inputName.add(args[2]);
-            uKey(inputName.get(0));
+            uKey(args[2]);
         } else {
+            List<String> inputName = new ArrayList<>();
+            String outputName = null;
             for (int i = 1; i < args.length; i++) {
                if (args[i].equals("-out")) {
                    outputName = args[i+1];
@@ -50,7 +48,7 @@ class HomeTar{
     }
 
     public static void uKey(String inputName) throws IOException {
-        FileReader reader = new FileReader(inputName);
+        FileReader reader = new FileReader(String.valueOf(Paths.get(inputName)));
         int character;
         StringBuilder nameToOutput = new StringBuilder();
         List<String> outputFileName = new ArrayList<>();
@@ -79,11 +77,11 @@ class HomeTar{
         reader.read();
         int i = 0;
         int k = 0;
-        File newFile = new File(outputFileName.get(i));
+        File newFile = new File(String.valueOf(Paths.get(outputFileName.get(i))));
         FileWriter newFileWriter = new FileWriter(newFile);
         while ((character = reader.read()) != -1) {
             if (k == 0) {
-                newFile = new File(outputFileName.get(i));
+                newFile = new File(String.valueOf(Paths.get(outputFileName.get(i))));
                 newFileWriter = new FileWriter(newFile);
                 i++;
             }
@@ -108,12 +106,12 @@ class HomeTar{
             }
         }
 
-        FileWriter result = new FileWriter(outputName, false);
+        FileWriter result = new FileWriter(String.valueOf(Paths.get(outputName)), false);
         StringBuilder writer = new StringBuilder();
         StringBuilder info = new StringBuilder();
 
         for (String s : listOfInput) {
-            FileReader reader = new FileReader(s);
+            FileReader reader = new FileReader(String.valueOf(Paths.get(s)));
             int lengthOfText = 0;
 
             int character;
