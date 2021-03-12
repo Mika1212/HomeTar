@@ -35,10 +35,10 @@ class HomeTarTest {
         deleteIfExists(output);
     }
 
-    public static boolean isEqual(File it, File other) throws IOException {
+    public static boolean isEqual(Path it, Path other) throws IOException {
 
-        byte[] first = readAllBytes(Paths.get(it.getPath()));
-        byte[] second = readAllBytes(Paths.get(other.getPath()));
+        byte[] first = readAllBytes(it);
+        byte[] second = readAllBytes(other);
 
         assertArrayEquals(first, second);
         return true;
@@ -46,8 +46,12 @@ class HomeTarTest {
 
     @Test
     void isEqual() throws IOException {
-        assertTrue(isEqual(new File("testData//in1.txt"), new File("testData//inCopy1.txt")));
-        assertTrue(isEqual(new File("testData//in2.txt"), new File("testData//inCopy2.txt")));
+        Path in1 = Paths.get("testData//in1.txt");
+        Path in2 = Paths.get("testData//in2.txt");
+        Path inCopy1 = Paths.get("testData//inCopy1.txt");
+        Path inCopy2 = Paths.get("testData//inCopy2.txt");
+        assertTrue(isEqual(in1, inCopy1));
+        assertTrue(isEqual(in2, inCopy2));
     }
 
     @Test
@@ -58,12 +62,12 @@ class HomeTarTest {
         Path inCopy2 = Paths.get("testData//inCopy2.txt");
         Path output = Paths.get("testData//output.txt");
 
-        HomeTar.main(new String[]{"hometar", String.valueOf(inCopy1), String.valueOf(inCopy2), "-out", String.valueOf(output)});
-        deleteIfExists(inCopy1);
-        deleteIfExists(inCopy2);
+        HomeTar.main(new String[]{"hometar",  "-out", String.valueOf(output), String.valueOf(in1), String.valueOf(in2)});
+        deleteIfExists(in1);
+        deleteIfExists(in2);
         HomeTar.main(new String[]{"hometar", "-u", String.valueOf(output)});
-        assertTrue(isEqual(new File(String.valueOf(in1)), new File(String.valueOf(inCopy1))));
-        assertTrue(isEqual(new File(String.valueOf(in2)), new File(String.valueOf(inCopy2))));
+        assertTrue(isEqual(in1, inCopy1));
+        assertTrue(isEqual(in2, inCopy2));
     }
 
 
