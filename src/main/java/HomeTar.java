@@ -1,21 +1,16 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.sound.sampled.AudioFormat;
+import java.io.*;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-class HomeTar{
+import static java.nio.charset.StandardCharsets.UTF_8;
 
-    public static void help() {
-        System.out.println("This command works with files. " +
-                "If you use the key \"-out\" it will combine other files into only one. " +
-                "You can use the key \"-u\" to subtract all files from the one that was combined" +
-                "Example -out: HomeTar a.txt b.txt -out output.txt" +
-                "Example -u: HomeTar -u output.txt");
-    }
+class HomeTar{
 
     public static void main(String[] args) throws IOException {
 
@@ -42,7 +37,7 @@ class HomeTar{
             }
             uKey(args[2]);
         } else {
-            if (args.length < 5) {
+            if (args.length < 4) {
                 System.out.println("Specify your command line");
                 help();
                 return;
@@ -69,6 +64,14 @@ class HomeTar{
         }
     }
 
+    public static void help() {
+        System.out.println("This command works with files. " +
+                "If you use the key \"-out\" it will combine other files into only one. " +
+                "You can use the key \"-u\" to subtract all files from the one that was combined" +
+                "Example -out: HomeTar a.txt b.txt -out output.txt" +
+                "Example -u: HomeTar -u output.txt");
+    }
+
     public static void uKey(String inputName) throws IOException {
         FileReader reader = new FileReader(inputName);
         char character;
@@ -86,7 +89,8 @@ class HomeTar{
                 numberOfLines = 0;
             } else {
                 numberOfLines++;
-                int end = nameToOutput.indexOf("|");
+                int end = nameToOutput.lastIndexOf(" ");
+                System.out.println(end);
                 String name = nameToOutput.substring(0, end);
                 int number = Integer.parseInt(nameToOutput.substring(end + 1));
 
@@ -131,8 +135,8 @@ class HomeTar{
 
         for (String value : listOfInput) {
             if (!Files.exists(Paths.get(value))) {
-                System.out.println("\"" + value + "\"" + " file doesn't exist");
-                return;
+                System.out.println("\"" + value + "\"");
+                throw new FileNotFoundException();
             }
         }
 
@@ -140,7 +144,7 @@ class HomeTar{
         StringBuilder info = new StringBuilder();
 
         for (String s : listOfInput) {
-            FileReader reader = new FileReader(s);
+            BufferedReader reader = new BufferedReader(new FileReader(s), UTF_8.hashCode());
             int lengthOfText = 0;
 
             int character;
@@ -151,7 +155,7 @@ class HomeTar{
 
             reader.close();
             writer.append("\n");
-            info.append(s).append("|").append(lengthOfText).append("\n");
+            info.append(s).append(" ").append(lengthOfText).append("\n");
         }
 
         FileWriter result = new FileWriter(outputName, false);
