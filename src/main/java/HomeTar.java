@@ -144,7 +144,7 @@ class HomeTar{
         StringBuilder info = new StringBuilder();
 
         for (String s : listOfInput) {
-            BufferedReader reader = new BufferedReader(new FileReader(s), UTF_8.hashCode());
+            BufferedReader reader = Files.newBufferedReader(Paths.get(s), UTF_8);
             int lengthOfText = 0;
 
             int character;
