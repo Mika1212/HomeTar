@@ -1,11 +1,8 @@
-import javax.sound.sampled.AudioFormat;
 import java.io.*;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -14,12 +11,12 @@ class HomeTar{
 
     public static void main(String[] args) throws IOException {
 
-        if (!args[0].toLowerCase().equals("hometar")) {
+        if (args.length < 2) {
             System.out.println("Specify your command line");
             return;
         }
 
-        if (args.length < 2) {
+        if (!args[0].toLowerCase().equals("hometar")) {
             System.out.println("Specify your command line");
             return;
         }
@@ -30,14 +27,18 @@ class HomeTar{
         }
 
         if (args[1].toLowerCase().equals("-u")) {
-            if (args.length != 3) {
+            if (args.length != 3 ||
+                    (Arrays.toString(args).toLowerCase().indexOf("-u")
+                            != Arrays.toString(args).toLowerCase().lastIndexOf("-u"))) {
                 System.out.println("Specify your command line");
                 help();
                 return;
             }
             uKey(args[2]);
         } else {
-            if (args.length < 4) {
+            if (args.length < 4 ||
+                    (Arrays.toString(args).toLowerCase().indexOf("-out")
+                            != Arrays.toString(args).toLowerCase().lastIndexOf("-out"))) {
                 System.out.println("Specify your command line");
                 help();
                 return;
@@ -47,14 +48,16 @@ class HomeTar{
             List<String> inputName = new ArrayList<>();
             String outputName = null;
             for (int i = 1; i < args.length; i++) {
-               if (args[i].equals("-out")) {
+               if (args[i].equals("-out") && i < args.length - 1) {
                    outputName = args[i+1];
                    k = i+1;
                }
+
                if (k<i) {
                    inputName.add(args[i]);
                }
             }
+
             if (outputName == null) {
                 System.out.println("Specify your command line");
                 help();
@@ -73,7 +76,7 @@ class HomeTar{
     }
 
     public static void uKey(String inputName) throws IOException {
-        FileReader reader = new FileReader(inputName);
+        BufferedReader reader = Files.newBufferedReader(Paths.get(inputName), UTF_8);
         char character;
         StringBuilder nameToOutput = new StringBuilder();
         List<String> outputFileName = new ArrayList<>();
@@ -110,14 +113,11 @@ class HomeTar{
         int i = 0;
         int k = 0;
 
-        File newFile = new File(outputFileName.get(i));
-        FileWriter newFileWriter = new FileWriter(newFile);
+        BufferedWriter newFileWriter = Files.newBufferedWriter(Paths.get(outputFileName.get(i)), UTF_8);
         while ((character = (char) reader.read()) != (char)-1) {
             if (k == 0) {
                 newFileWriter.close();
-                newFile = new File(outputFileName.get(i));
-                newFileWriter = new FileWriter(newFile);
-                i++;
+                newFileWriter = Files.newBufferedWriter(Paths.get(outputFileName.get(i)), UTF_8);                i++;
             }
             if (k < outputFileNumber.get(i - 1)) {
                 newFileWriter.write(character);
@@ -131,7 +131,6 @@ class HomeTar{
     }
 
     public static void outKey(List<String> listOfInput, String outputName) throws IOException {
-
 
         for (String value : listOfInput) {
             if (!Files.exists(Paths.get(value))) {
@@ -158,7 +157,7 @@ class HomeTar{
             info.append(s).append(" ").append(lengthOfText).append("\n");
         }
 
-        FileWriter result = new FileWriter(outputName, false);
+        BufferedWriter result = Files.newBufferedWriter(Paths.get(outputName), UTF_8);
         writer.deleteCharAt(writer.length() - 1);
         result.write(info + "\n\n");
         result.write(writer.toString());
