@@ -27,7 +27,7 @@ class HomeTarTest {
     void ending() throws IOException {
         Path copy1 = Paths.get("testData//inCopy 1.txt");
         Path copy2 = Paths.get("testData//inCopy 2.txt");
-        Path output = Paths.get("testData//my-user-data.txt");
+        Path output = Paths.get("testData//my-out-user-data.txt");
         deleteIfExists(copy1);
         deleteIfExists(copy2);
         deleteIfExists(output);
@@ -58,7 +58,7 @@ class HomeTarTest {
         Path in2 = Paths.get("testData//in 2.txt");
         Path inCopy1 = Paths.get("testData//inCopy 1.txt");
         Path inCopy2 = Paths.get("testData//inCopy 2.txt");
-        Path output = Paths.get("testData//my-user-data.txt");
+        Path output = Paths.get("testData//my-out-user-data.txt");
 
         HomeTar.main(new String[]{"hometar",  "-out", String.valueOf(output), String.valueOf(inCopy1), String.valueOf(inCopy2)});
         deleteIfExists(inCopy1);

@@ -2,7 +2,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -13,31 +12,26 @@ class HomeTar{
 
         if (args.length < 2) {
             System.out.println("Specify your command line");
-            return;
-        }
-
-        if (!args[0].toLowerCase().equals("hometar")) {
-            System.out.println("Specify your command line");
-            return;
+            System.exit(-1);
         }
 
         if (args[1].toLowerCase().equals("help")) {
             help();
-            return;
+            System.exit(-1);
         }
 
         if (args[1].toLowerCase().equals("-u")) {
             if (args.length != 3) {
                 System.out.println("1 Specify your command line");
                 help();
-                return;
+                System.exit(-1);
             }
             uKey(args[2]);
         } else {
             if (args.length < 4) {
                 System.out.println("Specify your command line");
                 help();
-                return;
+                System.exit(-1);
             }
 
             int k = -1;
@@ -57,7 +51,7 @@ class HomeTar{
             if (outputName == null) {
                 System.out.println("Specify your command line");
                 help();
-                return;
+                System.exit(-1);
             }
             outKey(inputName, outputName);
         }
@@ -102,7 +96,7 @@ class HomeTar{
         if (outputFileName.size() == 0) {
             System.out.println("Specify your command line");
             help();
-            return;
+            System.exit(-1);
         }
 
         reader.read();
@@ -131,8 +125,9 @@ class HomeTar{
 
         for (String value : listOfInput) {
             if (!Files.exists(Paths.get(value))) {
-                System.out.println("\"" + value + "\"");
-                throw new FileNotFoundException();
+                System.out.println("\"" + value + "\" doesn't exist");
+                help();
+                System.exit(-1);
             }
         }
 
