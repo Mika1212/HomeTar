@@ -60,10 +60,10 @@ class HomeTarTest {
         Path inCopy2 = Paths.get("testData//inCopy 2.txt");
         Path output = Paths.get("testData//my-out-user-data.txt");
 
-        HomeTar.main(new String[]{"hometar",  "-out", String.valueOf(output), String.valueOf(inCopy1), String.valueOf(inCopy2)});
+        HomeTar.main(new String[]{"-out", String.valueOf(output), String.valueOf(inCopy1), String.valueOf(inCopy2)});
         deleteIfExists(inCopy1);
         deleteIfExists(inCopy2);
-        HomeTar.main(new String[]{"hometar", "-u", String.valueOf(output)});
+        HomeTar.main(new String[]{"-u", String.valueOf(output)});
         assertTrue(isEqual(in1, inCopy1));
         assertTrue(isEqual(in2, inCopy2));
     }

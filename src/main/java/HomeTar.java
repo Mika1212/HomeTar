@@ -10,25 +10,26 @@ class HomeTar{
 
     public static void main(String[] args) throws IOException {
 
-        if (args.length < 2) {
+        if (args.length < 1) {
             System.out.println("Specify your command line");
-            System.exit(-1);
-        }
-
-        if (args[1].toLowerCase().equals("help")) {
             help();
             System.exit(-1);
         }
 
-        if (args[1].toLowerCase().equals("-u")) {
-            if (args.length != 3) {
-                System.out.println("1 Specify your command line");
+        if (args[0].toLowerCase().equals("help")) {
+            help();
+            System.exit(0);
+        }
+
+        if (args[0].toLowerCase().equals("-u")) {
+            if (args.length != 2) {
+                System.out.println("Specify your command line");
                 help();
                 System.exit(-1);
             }
-            uKey(args[2]);
+            uKey(args[1]);
         } else {
-            if (args.length < 4) {
+            if (args.length < 3) {
                 System.out.println("Specify your command line");
                 help();
                 System.exit(-1);
@@ -37,7 +38,7 @@ class HomeTar{
             int k = -1;
             List<String> inputName = new ArrayList<>();
             String outputName = null;
-            for (int i = 1; i < args.length; i++) {
+            for (int i = 0; i < args.length; i++) {
                if (args[i].equals("-out") && i < args.length - 1) {
                    outputName = args[i+1];
                    k = i+1;
