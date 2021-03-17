@@ -117,7 +117,8 @@ class HomeTar{
         while ((character = (char) reader.read()) != (char)-1) {
             if (k == 0) {
                 newFileWriter.close();
-                newFileWriter = Files.newBufferedWriter(Paths.get(outputFileName.get(i)), UTF_8);                i++;
+                newFileWriter = Files.newBufferedWriter(Paths.get(outputFileName.get(i)), UTF_8);
+                i++;
             }
             if (k < outputFileNumber.get(i - 1)) {
                 newFileWriter.write(character);
