@@ -27,18 +27,14 @@ class HomeTar{
         }
 
         if (args[1].toLowerCase().equals("-u")) {
-            if (args.length != 3 ||
-                    (Arrays.toString(args).toLowerCase().indexOf("-u")
-                            != Arrays.toString(args).toLowerCase().lastIndexOf("-u"))) {
-                System.out.println("Specify your command line");
+            if (args.length != 3) {
+                System.out.println("1 Specify your command line");
                 help();
                 return;
             }
             uKey(args[2]);
         } else {
-            if (args.length < 4 ||
-                    (Arrays.toString(args).toLowerCase().indexOf("-out")
-                            != Arrays.toString(args).toLowerCase().lastIndexOf("-out"))) {
+            if (args.length < 4) {
                 System.out.println("Specify your command line");
                 help();
                 return;
@@ -68,11 +64,11 @@ class HomeTar{
     }
 
     public static void help() {
-        System.out.println("This command works with files. " +
-                "If you use the key \"-out\" it will combine other files into only one. " +
-                "You can use the key \"-u\" to subtract all files from the one that was combined" +
-                "Example -out: HomeTar a.txt b.txt -out output.txt" +
-                "Example -u: HomeTar -u output.txt");
+        System.out.println("This command works with files.\n" +
+                "If you use the key \"-out\", it'll combine other files into only one.\n" +
+                "You can use the key \"-u\" to subtract all files from the one that was combined\n" +
+                "Example -out: HomeTar a.txt b.txt -out output.txt\n" +
+                "Example -u: HomeTar -u output.txt\n");
     }
 
     public static void uKey(String inputName) throws IOException {
